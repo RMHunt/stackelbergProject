@@ -5,8 +5,8 @@
  */
 class ReactionFunction
 {
-    private double variableA;
-    private double variableB;
+    private float variableA;
+    private float variableB;
     
     /**
      * Empty constructor.
@@ -20,7 +20,7 @@ class ReactionFunction
     /**
      * Constructor given A and B.
      */
-    public ReactionFunction(double a, double b)
+    public ReactionFunction(float a, float b)
     {
         variableA = a;
         variableB = b;
@@ -29,21 +29,21 @@ class ReactionFunction
     /**
      * Method to calculate result of reaction given a leader strategy.
      */
-    private double calculateReactionValue(double leaderStrat)
+    public float calculateReactionValue(float leaderStrat)
     {
-        double reactionValue = variableA + variableB * leaderStrat;
+        float reactionValue = variableA + variableB * leaderStrat;
         return reactionValue;
     }
     
     /**
      * Getters.
      */
-    private double getA()
+    public float getA()
     {
         return variableA;
     }
     
-    private double getB()
+    public float getB()
     {
         return variableB;
     }
