@@ -20,7 +20,8 @@ public class LeaderInThe90s extends PlayerImpl{
 	@Override
 	public void startSimulation(int p_steps) throws RemoteException{
 		// Initialise learner and maximiser.
-		learner = new WeightedLeastSquare(0.95);
+		double forgetfulness = 0.95;
+		learner = new WeightedLeastSquare(forgetfulness);
 		maximiser = new Maximiser();
 		totalDays = 100 + p_steps;
 		currentDay = 100;
@@ -39,7 +40,7 @@ public class LeaderInThe90s extends PlayerImpl{
 	{
 
 		Record l_newRecord = m_platformStub.query(m_type, p_date);
-		// MATHS TO CALCULATE NEW PRICE@
+		// MATHS TO CALCULATE NEW PRICE:
 
 		// Add the new data to the learner and learn
 		// (May want to use updateReaction here if possible?)
