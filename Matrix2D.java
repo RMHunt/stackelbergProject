@@ -24,6 +24,12 @@ public class Matrix2D{
 		dimA = dimB = 1;
 	}
 
+	public Matrix2D(int dimA, int dimB){
+		this.dimA = dimA;
+		this.dimB = dimB;
+		this.matrix = new float[dimA][dimB];
+	}
+
 	/* ####### */
 	/* GETTERS */
 	/* ####### */
@@ -34,11 +40,11 @@ public class Matrix2D{
 		else throw new IllegalArgumentException("Dimension is 0 or 1");
 	}
 
-	public float getElement(int i, int j){
+	public float get(int i, int j){
 		return matrix[i][j];
 	}
 
-	public float getElement(int i){
+	public float get(int i){
 		return matrix[0][i];
 	}
 
@@ -54,7 +60,7 @@ public class Matrix2D{
 		float[][] sum = new float[dimA][dimB];
 		for (int i=0;i<dimA;i++)
 			for (int j=0;j<dimB;j++)
-				sum[i][j] = matrix[i][j] + other.getElement(i,j);
+				sum[i][j] = matrix[i][j] + other.get(i,j);
 
 		return new Matrix2D(sum);
 	}
@@ -69,7 +75,7 @@ public class Matrix2D{
 			for (int j=0;j<other.getDimension(1);j++){
 				multiplied[i][j] = 0;
 				for (int a=0; a < dimB;a++)
-					multiplied[i][j] += matrix[i][a] * other.getElement(a,j);
+					multiplied[i][j] += matrix[i][a] * other.get(a,j);
 			}
 
 		return new Matrix2D(multiplied);
