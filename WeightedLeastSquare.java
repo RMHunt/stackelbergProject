@@ -11,6 +11,7 @@ public class WeightedLeastSquare extends AbstractLearner{
 	private double     forgetfulness;
     private float      adjustFactor;
     private Matrix2D   p;
+    private Matrix2D   theta; // Parameters
 
 	public WeightedLeastSquare(double forgetfulness){
 		if (forgetfulness < 0 || forgetfulness > 1)
@@ -54,13 +55,23 @@ public class WeightedLeastSquare extends AbstractLearner{
         }
 
         // Calculate our initial parameters for our learned function using p and q
-        Matrix2D initParameters = p.invert().multiply(q);
-        learnedFunction = new ReactionFunction(initParameters.get(0,0), initParameters.get(1,0));
+        theta = p.invert().multiply(q);
+        thetaToReactionFunction();
     }
     
     // Will update the reaction function from just the most recent data
+    // Should we pass the new data via parameter? or just check most recent history 
     @Override
     public void updateLearn(){
+        // Updated = Old + Adjust(actual - estimate from model)
+        // theta+1 = theta + L+1 * [y+1 - phi^transposed(x+1)*theta]
+
+        // Where
+        // L+1 = (p * phi(x+1)) / (forget + phi^transposed(x+1) * p * phi(x+1))
+
+        // Then
+        // p+1 = (1/forget)(p - ( p * phi(x+1) * phi^transposed(x+1) * phi)
+        //                      / (forget + phi^transposed(x+1) * p * phi(x+1))
         return;
     }
     
@@ -74,6 +85,11 @@ public class WeightedLeastSquare extends AbstractLearner{
     @Override
     public ReactionFunction getReactionFunction(){
         return learnedFunction;
+    }
+
+    // Helper code to create a reaction function from learned parameters.
+    private void thetaToReactionFunction(){
+        learnedFunction = new ReactionFunction(theta.get(0,0), theta.get(1,0));
     }
 
 }
