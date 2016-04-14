@@ -41,11 +41,7 @@ public class WeightedLeastSquare extends AbstractLearner{
         int numDays = history.size();
 
         for (int t = 0; t < numDays; t++){
-            float[] phif = new float[2];
-            phif[0] = 1;
-            phif[1] = history.get(t).m_leaderPrice;
-
-            Matrix2D phi = new Matrix2D(phif).transpose(); // (Phi is COLUMN matrix [1, x(t)])
+            Matrix2D phi = makePhi(history.get(t).m_leaderPrice);
 
             float weight = (float)Math.pow(forgetfulness,numDays-t);
             p = p.add(phi.multiply(phi.transpose())
@@ -62,16 +58,24 @@ public class WeightedLeastSquare extends AbstractLearner{
     // Will update the reaction function from just the most recent data
     // Should we pass the new data via parameter? or just check most recent history 
     @Override
-    public void updateLearn(){
+    public void updateLearn(float leaderVal, float followerVal){
         // Updated = Old + Adjust(actual - estimate from model)
         // theta+1 = theta + L+1 * [y+1 - phi^transposed(x+1)*theta]
-
         // Where
         // L+1 = (p * phi(x+1)) / (forget + phi^transposed(x+1) * p * phi(x+1))
+        Matrix2D phi = makePhi(leaderVal);
+        Matrix2D det = phi.transpose().multiply(p).multiply(phi).add((float)forgetfulness);
+        
+        Matrix2D nextAdjust = (p.multiply(phi)).divide(det);
 
-        // Then
+        theta = theta.add( nextAdjust.multiply( followerVal - phi.transpose().multiply(theta).get()));
+        // Then calculate the next p
         // p+1 = (1/forget)(p - ( p * phi(x+1) * phi^transposed(x+1) * phi)
         //                      / (forget + phi^transposed(x+1) * p * phi(x+1))
+        p = (p.subtract( p.multiply(phi).multiply(phi.transpose()).multiply(phi)
+                          .divide(det))
+              .divide((float)forgetfulness));
+
         return;
     }
     
@@ -90,6 +94,15 @@ public class WeightedLeastSquare extends AbstractLearner{
     // Helper code to create a reaction function from learned parameters.
     private void thetaToReactionFunction(){
         learnedFunction = new ReactionFunction(theta.get(0,0), theta.get(1,0));
+    }
+
+    // Helper code to make phi arrays
+    private Matrix2D makePhi(float value){
+        float[] phif = new float[2];
+        phif[0] = 1;
+        phif[1] = value;
+
+        return new Matrix2D(phif).transpose(); // (Phi is COLUMN matrix [1, x(t)])
     }
 
 }

@@ -45,7 +45,7 @@ public class LeaderInThe90s extends PlayerImpl{
 		// Add the new data to the learner and learn
 		// (May want to use updateReaction here if possible?)
 		learner.addData(l_newRecord);
-		learner.learnReaction();
+		learner.updateReaction(l_newRecord.m_leaderPrice, l_newRecord.m_followerPrice);
 
 		// Maximise our best outcome with the learned reaction function
 		// and use this as our next price

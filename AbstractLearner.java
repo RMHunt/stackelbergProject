@@ -28,7 +28,7 @@ abstract class AbstractLearner
     abstract void learnReaction();
 
     // Will update the reaction function from just the most recent data
-    abstract void updateLearn();
+    abstract void updateLearn(float leaderValue, float followerValue);
 
     // Returns the predicted reaction for a particular date
     abstract float getReaction(float leaderValue);

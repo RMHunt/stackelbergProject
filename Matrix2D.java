@@ -48,12 +48,22 @@ public class Matrix2D{
 		return matrix[0][i];
 	}
 
+	public float get(){
+		return matrix[0][0];
+	}
+
+	public boolean isScalar(){
+		return (dimA==1 && dimB==1);
+	}
+
 	/* ########## */
 	/* OPERATIONS */
 	/* ########## */
 
 	/** Adds this matrix with another*/
 	public Matrix2D add(Matrix2D other){
+		if (other.isScalar())
+			return add(other.get());
 		if (dimA != other.getDimension(0) || dimB != other.getDimension(1))
 			throw new IllegalArgumentException("Matrices must be same size for addition");
 
@@ -65,8 +75,42 @@ public class Matrix2D{
 		return new Matrix2D(sum);
 	}
 
+	public Matrix2D add(float scalar){
+		float[][] sum = new float[dimA][dimB];
+		for (int i=0;i<dimA;i++)
+			for (int j=0;j<dimB;j++)
+				sum[i][j] = matrix[i][j] + scalar;
+
+		return new Matrix2D(sum);
+	}
+
+	public Matrix2D subtract(Matrix2D other){
+		if (other.isScalar())
+			return subtract(other.get());
+		if (dimA != other.getDimension(0) || dimB != other.getDimension(1))
+			throw new IllegalArgumentException("Matrices must be same size for addition");
+
+		float[][] sum = new float[dimA][dimB];
+		for (int i=0;i<dimA;i++)
+			for (int j=0;j<dimB;j++)
+				sum[i][j] = matrix[i][j] - other.get(i,j);
+
+		return new Matrix2D(sum);
+	}
+
+	public Matrix2D subtract(float scalar){
+		float[][] sum = new float[dimA][dimB];
+		for (int i=0;i<dimA;i++)
+			for (int j=0;j<dimB;j++)
+				sum[i][j] = matrix[i][j] - scalar;
+
+		return new Matrix2D(sum);
+	}
+
 	/** Multiplies this matrix with another*/
 	public Matrix2D multiply(Matrix2D other){
+		if (other.isScalar())
+			return multiply(other.get());
 		if (dimB != other.getDimension(0))
 			throw new IllegalArgumentException("The second dimension of the first matrix must be equal to the first dimension of the second matrix");
 
@@ -88,6 +132,22 @@ public class Matrix2D{
 				multiplied[i][j] = matrix[i][j]*scalar;
 
 		return new Matrix2D(multiplied);
+	}
+
+	public Matrix2D divide(Matrix2D other){
+		if (other.isScalar())
+			return divide(other.get());
+		else
+			throw new IllegalArgumentException("Can only divide by scalar matrix or value");
+	}
+
+	public Matrix2D divide(float scalar){
+		float[][] divided = new float[dimA][dimB];
+		for (int i=0;i<dimA;i++)
+			for (int j=0;j<dimB;j++)
+				divided[i][j] = matrix[i][j]/scalar;
+
+		return new Matrix2D(divided);
 	}
 
 	/** Transposes this matrix*/
