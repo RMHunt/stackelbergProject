@@ -11,11 +11,10 @@ import java.util.ArrayList;
  */
 abstract class AbstractLearner
 {
-    // I am honestly not entirely sure how to do this in the java way.
-    // I'd usually do it by doing stuff then returning a new
-    // reaction function object at the end. whaddya think?
+    // variables
+    // I think followerstrat is not used?
     protected List<Record> history = new ArrayList<Record>();
-    protected ReactionFunction learnedFunction;
+    protected ReactionFunction learnedFunction = new ReactionFunction(); // null pointer in calc error
     protected List<Float> followerStrats = new ArrayList<Float>();
     
     // abstract protected ReactionFunction learner();
@@ -49,7 +48,7 @@ abstract class AbstractLearner
 
     // calculate error using R-square method
     // maybe implement more error caluclation methods?
-    public double calculateError()
+    protected double calculateError()
     {
         double sst = 0;
         double sse = 0;
@@ -67,7 +66,7 @@ abstract class AbstractLearner
             float followerStrat = history.get(i).m_followerPrice;
             sst += Math.pow((followerStrat - meanY), 2);
             float leaderStrat = history.get(i).m_leaderPrice;
-            sse += Math.pow((followerStrat - learnedFunction.calculateReactionValue(leaderStrat)), 2);
+            sse += Math.pow((followerStrat - this.learnedFunction.calculateReactionValue(leaderStrat)), 2);
         }
         
         double rSquare = 1 - sse / sst;

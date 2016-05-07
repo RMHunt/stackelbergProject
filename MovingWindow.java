@@ -34,7 +34,9 @@ public class MovingWindow extends AbstractLearner{
         currentDate = windowSize;
         
         // Learn initial estimator
-        learnedFunction = regressWindow();
+        float[] newParams = regressWindow();
+        learnedFunction.setA(newParams[0]);
+        learnedFunction.setB(newParams[1]);
         
         // Update initial estimator using historical data until the end
         while (currentDate < history.size()){
@@ -58,12 +60,12 @@ public class MovingWindow extends AbstractLearner{
             return;
         }
         
-        ReactionFunction newFunction = regressWindow();
+        float[] newParams = regressWindow();
         float lambda = 0.95f;
         float currentA = learnedFunction.getA();
         float currentB = learnedFunction.getB();
-        learnedFunction.setA(currentA + lambda * (newFunction.getA() - currentA));
-        learnedFunction.setB(currentB + lambda * (newFunction.getB() - currentB));
+        learnedFunction.setA(currentA + lambda * (newParams[0] - currentA));
+        learnedFunction.setB(currentB + lambda * (newParams[1] - currentB));
     }
     
     // Returns the predicted reaction for a particular date
@@ -79,7 +81,7 @@ public class MovingWindow extends AbstractLearner{
     }
     
     // Linear regression method
-    private ReactionFunction regressWindow(){
+    private float[] regressWindow(){
         float alpha = 0, beta = 0;
         float cov = 0, var = 0;
         
@@ -103,8 +105,8 @@ public class MovingWindow extends AbstractLearner{
         alpha = followMean - beta * leaderMean;
         
         // construct function and return
-        ReactionFunction reaction = new ReactionFunction(alpha, beta);
-        return reaction;
+        float[] params = {alpha, beta};
+        return params;
     }
     
     // private 
