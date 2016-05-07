@@ -81,7 +81,7 @@ public class WeightedLeastSquare extends AbstractLearner{
     // Helper code to create a reaction function from learned parameters.
     private void thetaToReactionFunction(){
         learnedFunction = new ReactionFunction(theta.get(0,0), theta.get(1,0));
-        System.out.println(learnedFunction.getA() + " " + learnedFunction.getB());
+        // System.out.println(learnedFunction.getA() + " " + learnedFunction.getB());
     }
 
     // Helper code to make phi arrays
