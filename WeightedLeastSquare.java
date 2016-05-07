@@ -1,5 +1,6 @@
 import java.lang.IllegalArgumentException;
 import comp34120.ex2.*;
+import java.util.List;
 public class WeightedLeastSquare extends AbstractLearner{
 
 	/**
@@ -46,7 +47,14 @@ public class WeightedLeastSquare extends AbstractLearner{
         theta = theta.add( p.multiply(x.multiply(w_adjust)));
 
     }
-    
+
+    // Adds all available data to the history
+    @Override
+    public void addAllData(List<Record> records){
+        for (Record r:records)
+            addData(r);
+    }
+
     // Will learn the reaction function from all available data
     @Override
     public void learnReaction(){

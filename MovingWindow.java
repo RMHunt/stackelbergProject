@@ -104,5 +104,5 @@ public class MovingWindow extends AbstractLearner{
         return reaction;
     }
     
-    private 
+    // private 
 }

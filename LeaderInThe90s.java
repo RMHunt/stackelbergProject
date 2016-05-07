@@ -1,6 +1,8 @@
 import comp34120.ex2.*;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LeaderInThe90s extends PlayerImpl{
 

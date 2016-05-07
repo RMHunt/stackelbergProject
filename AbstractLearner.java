@@ -1,5 +1,7 @@
 import java.util.*;
 import comp34120.ex2.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * An abstraction of the learner classes. A learner takes historical data and
@@ -24,7 +26,7 @@ abstract class AbstractLearner
     }
     
     // Adds all available data to the history
-    public void addAllData(ArrayList<Record> records){
+    public void addAllData(List<Record> records){
         history.addAll(records);
     }
 
