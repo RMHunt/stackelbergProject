@@ -65,7 +65,7 @@ public class Matrix2D{
 		if (other.isScalar())
 			return add(other.get());
 		if (dimA != other.getDimension(0) || dimB != other.getDimension(1))
-			throw new IllegalArgumentException("Matrices must be same size for addition");
+			throw new IllegalArgumentException("Matrices must be same size for addition\nFirst is "+this.dimString()+"\nSecond is "+other.dimString());
 
 		float[][] sum = new float[dimA][dimB];
 		for (int i=0;i<dimA;i++)
@@ -88,7 +88,7 @@ public class Matrix2D{
 		if (other.isScalar())
 			return subtract(other.get());
 		if (dimA != other.getDimension(0) || dimB != other.getDimension(1))
-			throw new IllegalArgumentException("Matrices must be same size for addition");
+			throw new IllegalArgumentException("Matrices must be same size for subtraction\nFirst is "+this.dimString()+"\nSecond is "+other.dimString());
 
 		float[][] sum = new float[dimA][dimB];
 		for (int i=0;i<dimA;i++)
@@ -112,7 +112,7 @@ public class Matrix2D{
 		if (other.isScalar())
 			return multiply(other.get());
 		if (dimB != other.getDimension(0))
-			throw new IllegalArgumentException("The second dimension of the first matrix must be equal to the first dimension of the second matrix");
+			throw new IllegalArgumentException("The second dimension of the first matrix must be equal to the first dimension of the second matrix\nFirst is "+this.dimString()+"\nSecond is "+other.dimString());
 
 		float[][] multiplied = new float[dimA][other.getDimension(1)];
 		for (int i=0;i<dimA;i++)
@@ -197,6 +197,10 @@ public class Matrix2D{
 				s+=("┘\n");
 		}
 		return s;
+	}
+
+	public String dimString(){
+		return ("" + dimA + "x" + dimB);
 	}
 
 	/* ############## */
