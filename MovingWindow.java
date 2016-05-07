@@ -8,6 +8,9 @@ public class MovingWindow extends AbstractLearner{
 	 *	List<Record> 		history
 	 * 	List<Float> 		followerStrats
 	 * 	ReactionFunction 	learnedFunction 
+     *  void                addData
+     *  void                addAllData
+     *  void                addPrediction
 	 */
 	private int windowSize;
     private int currentDate;
