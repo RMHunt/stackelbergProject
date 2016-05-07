@@ -1,6 +1,7 @@
 import java.lang.IllegalArgumentException;
+import java.util.*;
 import comp34120.ex2.*;
-public class WeightedLeastSquare extends AbstractLearner{
+public class MovingWindow extends AbstractLearner{
 
 	/**
 	 *	Inherited:
@@ -8,18 +9,9 @@ public class WeightedLeastSquare extends AbstractLearner{
 	 * 	List<Float> 		followerStrats
 	 * 	ReactionFunction 	learnedFunction 
 	 */
-	private double     forgetfulness;
-    private float      adjustFactor;
-    private Matrix2D   p;
-    private Matrix2D   theta; // Parameters
+	private int windowSize;
+    private List<Record> window = new ArrayList<Record>; 
 
-	public WeightedLeastSquare(double forgetfulness){
-		if (forgetfulness < 0 || forgetfulness > 1)
-			throw new IllegalArgumentException("Forgetfulness must be between 0 and 1");
-
-		this.forgetfulness = forgetfulness;
-	}
- 
     // Will learn the reaction function from all available data
     @Override
     public void learnReaction(){
