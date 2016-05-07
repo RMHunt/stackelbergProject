@@ -20,7 +20,7 @@ public class WeightedLeastSquare extends AbstractLearner{
 		this.forgetfulness = forgetfulness;
 
         // Setup initial adjustment matrix and parameters:
-        p = Matrix2D.getIdentity(2).divide((float)0.01);
+        p = Matrix2D.getIdentity(2).divide(0.01f);
         theta = new Matrix2D(2,1);
         
 	}
@@ -31,11 +31,11 @@ public class WeightedLeastSquare extends AbstractLearner{
     	// Don't need to remember history
         // history.add(record);
 
-        // Matrix2D x = makePhi(record.m_leaderPrice);
-        // float y = record.m_followerPrice;
+        Matrix2D x = makePhi(record.m_leaderPrice);
+        float y = record.m_followerPrice;
 
-        Matrix2D x = makePhi(record.m_date);
-        float y = record.m_date*3 + 1;
+        // Matrix2D x = makePhi(record.m_date);
+        // float y = record.m_date*3 + 1;
 
         // Calculate adjustment matrix p
         Matrix2D det = x.transpose().multiply(p).multiply(x).add((float)forgetfulness);
