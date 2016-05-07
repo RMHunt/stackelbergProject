@@ -32,7 +32,7 @@ abstract class AbstractLearner
 
     // Adds one predicted reaction to the list of responsePredictions
     public void addPrediction(float prediction){
-    	history.add(prediction);
+    	followerStrats.add(prediction);
     }
 
     // Will learn the reaction function from all available data
@@ -49,7 +49,7 @@ abstract class AbstractLearner
 
     // calculate error using R-square method
     // maybe implement more error caluclation methods?
-    private double calculateError()
+    public double calculateError()
     {
         double sst = 0;
         double sse = 0;

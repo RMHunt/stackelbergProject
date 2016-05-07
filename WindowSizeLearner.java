@@ -3,13 +3,13 @@ import comp34120.ex2.*;
 
 public class WindowSizeLearner
 {
-    private List<float> errors;
+    private List<Float> errors;
     
-    public void WindowSizeLearner{
-        errors = new ArrayList<float>();
+    public WindowSizeLearner(){
+        errors = new ArrayList<Float>();
     }
     
-    private int learn(ArrayList<Record> records){
+    public int learn(List<Record> records){
         // Find best window size
         for (int windowSize = 1; windowSize <= 99; windowSize ++){
             // Learn function
@@ -18,16 +18,16 @@ public class WindowSizeLearner
             learner.learnReaction();
             
             // Test the function
-            errors.add(learner.calculateError());                
-            }
+            errors.add((float)learner.calculateError());                
         }
+        
         
         // find min error 
         float minError = errors.get(0);
         int bestSize = 1;
         for (int i = 1; i < errors.size(); i ++){
-            if (minError > error.get(i)){
-                minError = error.get(i);
+            if (minError > errors.get(i)){
+                minError = errors.get(i);
                 bestSize = i + 1;
             }
         }

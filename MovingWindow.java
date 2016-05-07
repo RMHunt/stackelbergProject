@@ -38,7 +38,7 @@ public class MovingWindow extends AbstractLearner{
         
         // Update initial estimator using historical data until the end
         while (currentDate < history.size()){
-            updateLearn(0.1, 0.1);
+            updateLearn(0.1f, 0.1f);
         }
     }
     
@@ -59,9 +59,9 @@ public class MovingWindow extends AbstractLearner{
         }
         
         ReactionFunction newFunction = regressWindow();
-        float lambda = 0.95;
-        currentA = learnedFunction.getA();
-        currentB = learnedFunction.getB();
+        float lambda = 0.95f;
+        float currentA = learnedFunction.getA();
+        float currentB = learnedFunction.getB();
         learnedFunction.setA(currentA + lambda * (newFunction.getA() - currentA));
         learnedFunction.setB(currentB + lambda * (newFunction.getB() - currentB));
     }
@@ -80,11 +80,11 @@ public class MovingWindow extends AbstractLearner{
     
     // Linear regression method
     private ReactionFunction regressWindow(){
-        float alpha, beta = 0;
-        float cov, var = 0;
+        float alpha = 0, beta = 0;
+        float cov = 0, var = 0;
         
         // find means
-        float leaderMean, followMean = 0;
+        float leaderMean = 0, followMean = 0;
         for (int i = 0; i < windowSize; i ++){
             leaderMean += window.get(i).m_leaderPrice;
             followMean += window.get(i).m_followerPrice;
@@ -95,7 +95,7 @@ public class MovingWindow extends AbstractLearner{
             float leader = window.get(i).m_leaderPrice;
             float follow = window.get(i).m_followerPrice;
             cov += (follow - followMean) * (leader - leaderMean);
-            var += (leader - leaderMean) ^ 2;
+            var += (leader - leaderMean) * (leader - leaderMean);
         }
         
         // calculate variables
