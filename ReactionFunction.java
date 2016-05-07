@@ -47,4 +47,17 @@ class ReactionFunction
     {
         return variableB;
     }
+    
+    /**
+     * Setters.
+     */
+    public void setA(float a)
+    {
+        variableA = a;
+    }
+    
+    public void setB(float b)
+    {
+        variableB = b;
+    }
 }

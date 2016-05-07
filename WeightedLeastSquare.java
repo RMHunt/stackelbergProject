@@ -46,12 +46,6 @@ public class WeightedLeastSquare extends AbstractLearner{
         theta = theta.add( p.multiply(x.multiply(w_adjust)));
 
     }
-
-    // Adds one predicted reaction to the list of responsePredictions
-    @Override
-    public void addPrediction(float prediction){
-    	followerStrats.add(prediction);
-    }
     
     // Will learn the reaction function from all available data
     @Override

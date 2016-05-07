@@ -25,10 +25,13 @@ public class LeaderInThe90s extends PlayerImpl{
 		maximiser = new Maximiser();
 		totalDays = 100 + p_steps;
 		currentDay = 100;
+		List<Record> records = new ArrayList<Record>();
 
 		// Add first 100 days of historic data to learner
-		for (int i = 1; i <= 100; i++)
-			learner.addData(m_platformStub.query(m_type, i));
+		for (int i = 0; i < 100; i++)
+			records.add(m_platformStub.query(m_type, i));
+			
+		learner.addAllData(records);
 
 		// Calculate our initial reaction function
 		learner.learnReaction();

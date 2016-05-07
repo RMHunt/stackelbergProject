@@ -5,7 +5,7 @@ import comp34120.ex2.*;
  * An abstraction of the learner classes. A learner takes historical data and
  * returns its approximation of the reaction function learned by its specific
  * method. Also provides means to test its own accuracy.
- * @author Ivan
+ * @author Ivan, Richard
  */
 abstract class AbstractLearner
 {
@@ -19,10 +19,19 @@ abstract class AbstractLearner
     // abstract protected ReactionFunction learner();
 
     // Adds one item of data to the history
-    abstract void addData(Record record);
+    public void addData(Record record){
+    	history.add(record);
+    }
+    
+    // Adds all available data to the history
+    public void addAllData(ArrayList<Record> records){
+        history.addAll(records);
+    }
 
     // Adds one predicted reaction to the list of responsePredictions
-    abstract void addPrediction(float prediction);
+    public void addPrediction(float prediction){
+    	followerStrats.add(prediction);
+    }
 
     // Will learn the reaction function from all available data
     abstract void learnReaction();
