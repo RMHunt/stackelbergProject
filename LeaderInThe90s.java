@@ -6,6 +6,8 @@ import java.util.List;
 
 public class LeaderInThe90s extends PlayerImpl{
 
+	private AbstractLearner weightedLearner;
+	private AbstractLearner windowedLearner;
 	private AbstractLearner learner;
 	private Maximiser maximiser;
 	private int totalDays;
@@ -23,17 +25,28 @@ public class LeaderInThe90s extends PlayerImpl{
 	public void startSimulation(int p_steps) throws RemoteException{
 		// Initialise learner and maximiser.
 		double forgetfulness = 0.99;
-		learner = new WeightedLeastSquare(forgetfulness);
+		weightedLearner = new WeightedLeastSquare(forgetfulness);
 		maximiser = new Maximiser();
 		totalDays = 100 + p_steps;
 		currentDay = 100;
+		
 		List<Record> records = new ArrayList<Record>();
-
 		// Add first 100 days of historic data to learner
 		for (int i = 0; i < 100; i++)
 			records.add(m_platformStub.query(m_type, i));
 			
-		learner.addAllData(records);
+		// Initialise moving window learner.
+		WindowSizeLearner windowSizeLearner = new WindowSizeLearner();
+		int windowSize = windowSizeLearner.learn(records);
+		windowedLearner = new MovingWindow(windowSize);
+			
+		weightedLearner.addAllData(records);
+		windowedLearner.addAllData(records);
+		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
+			learner = windowedLearner;
+		} else {
+			learner = weightedLearner;
+		}
 
 		// Calculate our initial reaction function
 		learner.learnReaction();
