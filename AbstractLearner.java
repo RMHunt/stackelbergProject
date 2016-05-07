@@ -22,6 +22,11 @@ abstract class AbstractLearner
     public void addData(Record record){
     	history.add(record);
     }
+    
+    // Adds all available data to the history
+    public void addAllData(ArrayList<Record> records){
+        history.addAll(records);
+    }
 
     // Adds one predicted reaction to the list of responsePredictions
     public void addPrediction(float prediction){

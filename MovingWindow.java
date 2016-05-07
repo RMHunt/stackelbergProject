@@ -10,53 +10,57 @@ public class MovingWindow extends AbstractLearner{
 	 * 	ReactionFunction 	learnedFunction 
 	 */
 	private int windowSize;
-    private List<Record> window = new ArrayList<Record>; 
+    private int currentDate;
+    private List<Record> window = new ArrayList<Record>();
+        
+    // constructor
+    public MovingWindow(int windowSize){
+        if(windowSize < 1)
+            throw new IllegalArgumentException("Window Size must not be less than 1");
+        
+        this.windowSize = windowSize;
+    }
 
     // Will learn the reaction function from all available data
     @Override
     public void learnReaction(){
-        // Calculate our initial P from data so far
-        p = new Matrix2D(2,2);
-        Matrix2D q = new Matrix2D(2,1);
-        int numDays = history.size();
-
-        for (int t = 0; t < numDays; t++){
-            Matrix2D phi = makePhi(history.get(t).m_leaderPrice);
-
-            float weight = (float)Math.pow(forgetfulness,numDays-t);
-            p = p.add(phi.multiply(phi.transpose())
-                         .multiply(weight));
-            q = q.add(phi.multiply(history.get(t).m_followerPrice)
-                         .multiply(weight));
+        // Initialise window
+        for (int i = 0; i < windowSize; i ++){
+            window.add(history.get(i));
         }
-
-        // Calculate our initial parameters for our learned function using p and q
-        theta = p.invert().multiply(q);
-        thetaToReactionFunction();
+        currentDate = windowSize;
+        
+        // Learn initial estimator
+        learnedFunction = regressWindow();
+        
+        // Update initial estimator using historical data until the end
+        while (currentDate < history.size){
+            updateLearn(0.1, 0.1);
+        }
     }
     
-    // Will update the reaction function from just the most recent data
-    // Should we pass the new data via parameter? or just check most recent history 
+    // Update the reaction function 
     @Override
     public void updateLearn(float leaderVal, float followerVal){
-        // Updated = Old + Adjust(actual - estimate from model)
-        // theta+1 = theta + L+1 * [y+1 - phi^transposed(x+1)*theta]
-        // Where
-        // L+1 = (p * phi(x+1)) / (forget + phi^transposed(x+1) * p * phi(x+1))
-        Matrix2D phi = makePhi(leaderVal);
-        Matrix2D det = phi.transpose().multiply(p).multiply(phi).add((float)forgetfulness);
+        // Updated = Old + 0.95 * difference between new and old
+        // 0.95 simulates the lambda in the notes for modified moving window
+        // there should be a mathematical solution to find the best theta for the
+        // whole equation, but I have not found it yet.
+        // probably too complex if lambda has to be learned too.
+        if (currentDate < history.size){
+            window.remove(0);
+            window.add(history.get(currentDate));
+            currentDate ++;
+        } else {
+            return;
+        }
         
-        Matrix2D nextAdjust = (p.multiply(phi)).divide(det);
-
-        theta = theta.add( nextAdjust.multiply( followerVal - phi.transpose().multiply(theta).get()));
-        // Then calculate the next p
-        // p+1 = (1/forget)(p - ( p * phi(x+1) * phi^transposed(x+1) * phi)
-        //                      / (forget + phi^transposed(x+1) * p * phi(x+1))
-        p = (p.subtract( p.multiply(phi).multiply(phi.transpose()).multiply(phi)
-                          .divide(det))
-              .divide((float)forgetfulness));
-
-        return;
+        ReactionFunction newFunction = regressWindow();
+        float lambda = 0.95;
+        currentA = learnedFunction.getA();
+        currentB = learnedFunction.getB();
+        learnedFunction.setA(currentA + lambda * (newFunction.getA() - currentA));
+        learnedFunction.setB(currentB + lambda * (newFunction.getB() - currentB));
     }
     
     // Returns the predicted reaction for a particular date
@@ -70,19 +74,35 @@ public class MovingWindow extends AbstractLearner{
     public ReactionFunction getReactionFunction(){
         return learnedFunction;
     }
-
-    // Helper code to create a reaction function from learned parameters.
-    private void thetaToReactionFunction(){
-        learnedFunction = new ReactionFunction(theta.get(0,0), theta.get(1,0));
+    
+    // Linear regression method
+    private ReactionFunction regressWindow(){
+        float alpha, beta = 0;
+        float cov, var = 0;
+        
+        // find means
+        float leaderMean, followMean = 0;
+        for (int i = 0; i < windowSize; i ++){
+            leaderMean += window.get(i).m_leaderPrice;
+            followMean += window.get(i).m_followerPrice;
+        }
+        
+        // find sums
+        for (int i = 0; i < windowSize; i ++){
+            float leader = window.get(i).m_leaderPrice;
+            float follow = window.get(i).m_followerPrice;
+            cov += (follow - followMean) * (leader - leaderMean);
+            var += (leader - leaderMean) ^ 2;
+        }
+        
+        // calculate variables
+        beta = cov / var;
+        alpha = followMean - beta * leaderMean;
+        
+        // construct function and return
+        ReactionFunction reaction = new ReactionFunction(alpha, beta);
+        return reaction;
     }
-
-    // Helper code to make phi arrays
-    private Matrix2D makePhi(float value){
-        float[] phif = new float[2];
-        phif[0] = 1;
-        phif[1] = value;
-
-        return new Matrix2D(phif).transpose(); // (Phi is COLUMN matrix [1, x(t)])
-    }
-
+    
+    private 
 }
