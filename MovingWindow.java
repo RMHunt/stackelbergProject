@@ -37,7 +37,7 @@ public class MovingWindow extends AbstractLearner{
         learnedFunction = regressWindow();
         
         // Update initial estimator using historical data until the end
-        while (currentDate < history.size){
+        while (currentDate < history.size()){
             updateLearn(0.1, 0.1);
         }
     }
@@ -50,7 +50,7 @@ public class MovingWindow extends AbstractLearner{
         // there should be a mathematical solution to find the best theta for the
         // whole equation, but I have not found it yet.
         // probably too complex if lambda has to be learned too.
-        if (currentDate < history.size){
+        if (currentDate < history.size()){
             window.remove(0);
             window.add(history.get(currentDate));
             currentDate ++;

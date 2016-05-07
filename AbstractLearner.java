@@ -32,7 +32,7 @@ abstract class AbstractLearner
 
     // Adds one predicted reaction to the list of responsePredictions
     public void addPrediction(float prediction){
-    	followerStrats.add(prediction);
+    	history.add(prediction);
     }
 
     // Will learn the reaction function from all available data
@@ -55,18 +55,19 @@ abstract class AbstractLearner
         double sse = 0;
         double meanY = 0;
         
-        for (int i = 0; i < followerStrats.size(); i ++)
+        for (int i = 0; i < history.size(); i ++)
         {
-            meanY += followerStrats.get(i);
+            meanY += history.get(i).m_followerPrice;
         }
         
-        meanY = meanY / followerStrats.size();
+        meanY = meanY / history.size();
         
-        for (int i = 0; i < followerStrats.size(); i ++)
+        for (int i = 0; i < history.size(); i ++)
         {
-            sst += Math.pow((followerStrats.get(i) - meanY), 2);
+            float followerStrat = history.get(i).m_followerPrice;
+            sst += Math.pow((followerStrat - meanY), 2);
             float leaderStrat = history.get(i).m_leaderPrice;
-            sse += Math.pow((followerStrats.get(i) - learnedFunction.calculateReactionValue(leaderStrat)), 2);
+            sse += Math.pow((followerStrat - learnedFunction.calculateReactionValue(leaderStrat)), 2);
         }
         
         double rSquare = 1 - sse / sst;
