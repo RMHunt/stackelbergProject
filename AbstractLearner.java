@@ -48,7 +48,7 @@ abstract class AbstractLearner
 
     // calculate error using R-square method
     // maybe implement more error caluclation methods?
-    protected double calculateError()
+    public double calculateError()
     {
         double sst = 0;
         double sse = 0;
@@ -69,7 +69,7 @@ abstract class AbstractLearner
             sse += Math.pow((followerStrat - this.learnedFunction.calculateReactionValue(leaderStrat)), 2);
         }
         
-        double rSquare = 1 - sse / sst;
+        double rSquare = 1 - (sse / sst);
         return rSquare;
     }
 }

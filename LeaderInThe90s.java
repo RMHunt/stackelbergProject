@@ -44,6 +44,9 @@ public class LeaderInThe90s extends PlayerImpl{
 		weightedLearner.addAllData(records);
 		windowedLearner.addAllData(records);
 
+		weightedLearner.learnReaction();
+		windowedLearner.learnReaction();
+
 		// Error is between 0 and 1, 1 is less error
 		m_platformStub.log(PlayerType.LEADER,"Weighted: "+weightedLearner.calculateError()+" | Window: "+windowedLearner.calculateError());
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
