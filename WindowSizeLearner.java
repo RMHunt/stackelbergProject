@@ -3,10 +3,10 @@ import comp34120.ex2.*;
 
 public class WindowSizeLearner
 {
-    private List<Float> errors;
+    private List<Double> errors;
     
     public WindowSizeLearner(){
-        errors = new ArrayList<Float>();
+        errors = new ArrayList<Double>();
     }
     
     public int learn(List<Record> records){
@@ -18,15 +18,16 @@ public class WindowSizeLearner
             learner.learnReaction();
             
             // Test the function
-            errors.add((float)learner.calculateError());                
+            errors.add(learner.calculateError());
+            System.out.println(learner.calculateError());                
         }
         
         
         // find min error 
-        float minError = errors.get(0);
+        Double minError = errors.get(0);
         int bestSize = 1;
         for (int i = 1; i < errors.size(); i ++){
-            if (minError > errors.get(i)){
+            if (minError < errors.get(i)){
                 minError = errors.get(i);
                 bestSize = i + 1;
             }

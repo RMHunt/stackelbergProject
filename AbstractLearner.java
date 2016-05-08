@@ -54,6 +54,7 @@ abstract class AbstractLearner
         double sse = 0;
         double meanY = 0;
         
+        System.out.println(history.size());
         for (int i = 0; i < history.size(); i ++)
         {
             meanY += history.get(i).m_followerPrice;
