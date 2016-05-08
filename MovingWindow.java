@@ -91,6 +91,8 @@ public class MovingWindow extends AbstractLearner{
             leaderMean += window.get(i).m_leaderPrice;
             followMean += window.get(i).m_followerPrice;
         }
+        leaderMean = leaderMean / windowSize;
+        followMean = followMean / windowSize;
         
         // find sums
         for (int i = 0; i < windowSize; i ++){
