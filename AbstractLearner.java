@@ -54,7 +54,7 @@ abstract class AbstractLearner
         double sse = 0;
         double meanY = 0;
         
-        System.out.println(history.size());
+        //System.out.println(history.size());
         for (int i = 0; i < history.size(); i ++)
         {
             meanY += history.get(i).m_followerPrice;
@@ -70,7 +70,7 @@ abstract class AbstractLearner
             sse += Math.pow((followerStrat - this.learnedFunction.calculateReactionValue(leaderStrat)), 2);
         }
         
-        double rSquare = 1 - (sse / sst);
+        double rSquare = 1 - sse / sst;
         return rSquare;
     }
 }
