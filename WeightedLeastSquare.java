@@ -28,8 +28,8 @@ public class WeightedLeastSquare extends AbstractLearner{
 	// Adds one item of data to the history & calculate updated parameters
 	@Override
     public void addData(Record record){
-    	// Don't need to remember history
-        // history.add(record);
+    	// Don't need to remember history but it is used for error calculation
+        history.add(record);
 
         Matrix2D x = makePhi(record.m_leaderPrice);
         float y = record.m_followerPrice;
