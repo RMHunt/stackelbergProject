@@ -52,10 +52,14 @@ public class LeaderInThe90s extends PlayerImpl{
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
 			m_platformStub.log(PlayerType.LEADER,"Selected MovingWindow");
 			learner = windowedLearner;
+			System.out.println("Using Moving Window");
 		} else {
 			m_platformStub.log(PlayerType.LEADER,"Selected WeightedLeastSquare");
 			learner = weightedLearner;
+			System.out.println("Using Weighted Square");
 		}
+		System.out.println("Window Error " + windowedLearner.calculateError());
+		System.out.println("Weighted Error " + weightedLearner.calculateError());
 
 		// Calculate our initial reaction function
 		learner.learnReaction();
