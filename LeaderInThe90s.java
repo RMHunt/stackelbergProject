@@ -57,14 +57,14 @@ public class LeaderInThe90s extends PlayerImpl{
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
 			m_platformStub.log(PlayerType.LEADER,"Selected MovingWindow");
 			learner = windowedLearner;
-			System.out.println("Using Moving Window");
+			// System.out.println("Using Moving Window");
 		} else {
 			m_platformStub.log(PlayerType.LEADER,"Selected WeightedLeastSquare");
 			learner = weightedLearner;
-			System.out.println("Using Weighted Square");
+			// System.out.println("Using Weighted Square");
 		}
-		System.out.println("Window Error " + windowedLearner.calculateError());
-		System.out.println("Weighted Error " + weightedLearner.calculateError());
+		// System.out.println("Window Error " + windowedLearner.calculateError());
+		// System.out.println("Weighted Error " + weightedLearner.calculateError());
 
 		// Calculate our initial reaction function
 		learner.learnReaction();
@@ -76,9 +76,9 @@ public class LeaderInThe90s extends PlayerImpl{
 	{
 		Record l_newRecord = m_platformStub.query(m_type, p_date-1);
 		// MATHS TO CALCULATE NEW PRICE:
-		System.out.println("date " + p_date);
-		System.out.println("new leaderprice " + l_newRecord.m_leaderPrice);
-		System.out.println("new followerprice "+l_newRecord.m_followerPrice);
+		// System.out.println("date " + p_date);
+		// System.out.println("new leaderprice " + l_newRecord.m_leaderPrice);
+		// System.out.println("new followerprice "+l_newRecord.m_followerPrice);
 		// Add the new data to the learner and learn
 		// (May want to use updateReaction here if possible?)
 		learner.addData(l_newRecord);
