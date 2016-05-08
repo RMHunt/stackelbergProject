@@ -32,7 +32,7 @@ public class LeaderInThe90s extends PlayerImpl{
 		
 		List<Record> records = new ArrayList<Record>();
 		// Add first 100 days of historic data to learner
-		for (int i = 0; i < 100; i++)
+		for (int i = 1; i <= 100; i++)
 			records.add(m_platformStub.query(m_type, i));
 			
 		// Initialise moving window learner.
@@ -44,11 +44,13 @@ public class LeaderInThe90s extends PlayerImpl{
 		windowedLearner.addAllData(records);
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
 			learner = windowedLearner;
-			//System.out.println("Using Moving Window");
+			System.out.println("Using Moving Window");
 		} else {
 			learner = weightedLearner;
-			//System.out.println("Using Weighted Square");
+			System.out.println("Using Weighted Square");
 		}
+		System.out.println("Window Error " + windowedLearner.calculateError());
+		System.out.println("Weighted Error " + weightedLearner.calculateError());
 
 		// Calculate our initial reaction function
 		learner.learnReaction();
