@@ -44,8 +44,10 @@ public class LeaderInThe90s extends PlayerImpl{
 		windowedLearner.addAllData(records);
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
 			learner = windowedLearner;
+			//System.out.println("Using Moving Window");
 		} else {
 			learner = weightedLearner;
+			//System.out.println("Using Weighted Square");
 		}
 
 		// Calculate our initial reaction function
