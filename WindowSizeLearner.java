@@ -18,18 +18,20 @@ public class WindowSizeLearner
             learner.learnReaction();
             
             // Test the function
-            errors.add(learner.calculateError());
-            System.out.println(learner.calculateError());                
+            errors.add(learner.calculateError());               
         }
         
         
         // find min error 
-        Double minError = errors.get(0);
+        double minError = errors.get(1);
         int bestSize = 1;
         for (int i = 1; i < errors.size(); i ++){
+            System.out.println("max accuracy " + minError);
+            System.out.println("Current accuracy " + errors.get(i));
             if (minError < errors.get(i)){
                 minError = errors.get(i);
-                bestSize = i + 1;
+                bestSize = i;
+                System.out.println("update" + bestSize);
             }
         }
         
