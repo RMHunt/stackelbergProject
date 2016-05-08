@@ -26,7 +26,6 @@ public class LeaderInThe90s extends PlayerImpl{
 	public void startSimulation(int p_steps) throws RemoteException{
 		// Initialise learner and maximiser.
 		double forgetfulness = 0.95;
-		weightedLearner = new WeightedLeastSquare(forgetfulness);
 		maximiser = new Maximiser();
 		totalDays = 100 + p_steps;
 		currentDay = 100;
@@ -39,8 +38,14 @@ public class LeaderInThe90s extends PlayerImpl{
 		// Initialise moving window learner.
 		WindowSizeLearner windowSizeLearner = new WindowSizeLearner();
 		int windowSize = windowSizeLearner.learn(records);
+		m_platformStub.log(PlayerType.LEADER,"Optimal Window Size = " + windowSize);	
 		windowedLearner = new MovingWindow(windowSize);
-			
+
+		ForgetfulnessLearner fLearn = new ForgetfulnessLearner();
+		forgetfulness = fLearn.learn(records);
+		m_platformStub.log(PlayerType.LEADER,"Optimal forgetfulness = " + forgetfulness);
+		weightedLearner = new WeightedLeastSquare(forgetfulness);
+
 		weightedLearner.addAllData(records);
 		windowedLearner.addAllData(records);
 
