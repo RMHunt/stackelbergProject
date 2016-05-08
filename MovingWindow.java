@@ -55,6 +55,9 @@ public class MovingWindow extends AbstractLearner{
         if (currentDate < history.size()){
             window.remove(0);
             window.add(history.get(currentDate));
+            float[] newParams = regressWindow();
+            learnedFunction.setA(newParams[0]);
+            learnedFunction.setB(newParams[1]);
             currentDate ++;
         } else {
             return;

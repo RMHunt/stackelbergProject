@@ -3,6 +3,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
 
 public class LeaderInThe90s extends PlayerImpl{
 
@@ -24,7 +25,7 @@ public class LeaderInThe90s extends PlayerImpl{
 	@Override
 	public void startSimulation(int p_steps) throws RemoteException{
 		// Initialise learner and maximiser.
-		double forgetfulness = 0.99;
+		double forgetfulness = 0.95;
 		weightedLearner = new WeightedLeastSquare(forgetfulness);
 		maximiser = new Maximiser();
 		totalDays = 100 + p_steps;
@@ -32,7 +33,7 @@ public class LeaderInThe90s extends PlayerImpl{
 		
 		List<Record> records = new ArrayList<Record>();
 		// Add first 100 days of historic data to learner
-		for (int i = 0; i < 100; i++)
+		for (int i = 1; i <= 100; i++)
 			records.add(m_platformStub.query(m_type, i));
 			
 		// Initialise moving window learner.
@@ -42,11 +43,20 @@ public class LeaderInThe90s extends PlayerImpl{
 			
 		weightedLearner.addAllData(records);
 		windowedLearner.addAllData(records);
+
+		// Error is between 0 and 1, 1 is less error
+		m_platformStub.log(PlayerType.LEADER,"Weighted: "+weightedLearner.calculateError()+" | Window: "+windowedLearner.calculateError());
 		if (weightedLearner.calculateError() < windowedLearner.calculateError()){
+			m_platformStub.log(PlayerType.LEADER,"Selected MovingWindow");
 			learner = windowedLearner;
+			System.out.println("Using Moving Window");
 		} else {
+			m_platformStub.log(PlayerType.LEADER,"Selected WeightedLeastSquare");
 			learner = weightedLearner;
+			System.out.println("Using Weighted Square");
 		}
+		System.out.println("Window Error " + windowedLearner.calculateError());
+		System.out.println("Weighted Error " + weightedLearner.calculateError());
 
 		// Calculate our initial reaction function
 		learner.learnReaction();
@@ -70,10 +80,9 @@ public class LeaderInThe90s extends PlayerImpl{
 		// and use this as our next price
 		maximiser = new Maximiser(learner.getReactionFunction());
 		float newPrice = maximiser.calculateMaximum();
+		// Add a random factor in either direction
+		// newPrice = (float)((Math.random()-0.5f)*(0.2f*newPrice)+newPrice);
 		m_platformStub.publishPrice(m_type, newPrice);
-
-
-
 
 		currentDay++;
 
